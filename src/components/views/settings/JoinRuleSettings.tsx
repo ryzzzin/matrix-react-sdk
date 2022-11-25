@@ -188,16 +188,16 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
             description = _t("Anyone in a space can find and join. You can select multiple spaces.");
         }
 
-        definitions.splice(1, 0, {
-            value: JoinRule.Restricted,
-            label: <>
-                { _t("Space members") }
-                { upgradeRequiredPill }
-            </>,
-            description,
-            // if there are 0 allowed spaces then render it as invite only instead
-            checked: joinRule === JoinRule.Restricted && !!restrictedAllowRoomIds?.length,
-        });
+        // definitions.splice(1, 0, {
+        //     value: JoinRule.Restricted,
+        //     label: <>
+        //         { _t("Space members") }
+        //         { upgradeRequiredPill }
+        //     </>,
+        //     description,
+        //     // if there are 0 allowed spaces then render it as invite only instead
+        //     checked: joinRule === JoinRule.Restricted && !!restrictedAllowRoomIds?.length,
+        // });
     }
 
     const onChange = async (joinRule: JoinRule) => {

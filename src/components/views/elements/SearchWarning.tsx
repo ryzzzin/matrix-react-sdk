@@ -98,6 +98,8 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps) {
         return null;
     }
 
+    return null;
+
     return (
         <div className="mx_SearchWarning">
             { logo }

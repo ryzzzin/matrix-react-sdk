@@ -113,6 +113,8 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
             <p>{ previewsForAccount }</p>
         </>;
 
+        return null;
+
         return (
             <SettingsFieldset legend={_t("URL Previews")} description={description}>
                 { previewsForRoom }

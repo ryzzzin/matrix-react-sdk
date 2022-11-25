@@ -471,7 +471,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 { privilegedUsersSection }
                 { mutedUsersSection }
                 { bannedUsersSection }
-                <SettingsFieldset
+                { /* <SettingsFieldset
                     legend={_t("Permissions")}
                     description={
                         isSpaceRoom
@@ -481,7 +481,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 >
                     { powerSelectors }
                     { eventPowerSelectors }
-                </SettingsFieldset>
+                </SettingsFieldset> */ }
             </div>
         );
     }
