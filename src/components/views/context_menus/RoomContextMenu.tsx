@@ -277,8 +277,9 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         </IconizedContextMenuOption>;
     }
 
+    const isWidgets = false;
     let widgetsOption: JSX.Element;
-    if (!isVideoRoom) {
+    if (!isVideoRoom && isWidgets) {
         widgetsOption = <IconizedContextMenuOption
             onClick={(ev: ButtonEvent) => {
                 ev.preventDefault();
@@ -293,8 +294,9 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         />;
     }
 
+    const isExport = false;
     let exportChatOption: JSX.Element;
-    if (!isVideoRoom) {
+    if (!isVideoRoom && isExport) {
         exportChatOption = <IconizedContextMenuOption
             onClick={(ev: ButtonEvent) => {
                 ev.preventDefault();

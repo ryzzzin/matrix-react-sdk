@@ -196,6 +196,8 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
 };
 
 const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
+    return null;
+
     const apps = useWidgets(room);
     // Filter out virtual widgets
     const realApps = useMemo(() => apps.filter(app => app.eventId !== undefined), [apps]);
@@ -318,12 +320,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                         { pinCount }
                     </span> }
                 </Button> }
-            { !isVideoRoom && <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
+            { /* { !isVideoRoom && <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
                 { _t("Export chat") }
-            </Button> }
-            <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
+            </Button> } */ }
+            { /* <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
                 { _t("Share room") }
-            </Button>
+            </Button> */ }
             <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>
                 { _t("Room settings") }
             </Button>

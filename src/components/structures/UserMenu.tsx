@@ -336,13 +336,13 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
 
         let feedbackButton;
-        if (SettingsStore.getValue(UIFeature.Feedback)) {
-            feedbackButton = <IconizedContextMenuOption
-                iconClassName="mx_UserMenu_iconMessage"
-                label={_t("Feedback")}
-                onClick={this.onProvideFeedback}
-            />;
-        }
+        // if (SettingsStore.getValue(UIFeature.Feedback)) {
+        //     feedbackButton = <IconizedContextMenuOption
+        //         iconClassName="mx_UserMenu_iconMessage"
+        //         label={_t("Feedback")}
+        //         onClick={this.onProvideFeedback}
+        //     />;
+        // }
 
         let primaryOptionList = (
             <IconizedContextMenuOptionList>
@@ -401,8 +401,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         { OwnProfileStore.instance.displayName }
                     </span>
                     <span className="mx_UserMenu_contextMenu_userId">
-                        { UserIdentifierCustomisations.getDisplayUserIdentifier(
-                            MatrixClientPeg.get().getUserId(), { withDisplayName: true }) }
+                        { `@${UserIdentifierCustomisations.getDisplayUserIdentifier(
+                            MatrixClientPeg.get().getUserIdLocalpart(), { withDisplayName: true })}` }
                     </span>
                 </div>
 

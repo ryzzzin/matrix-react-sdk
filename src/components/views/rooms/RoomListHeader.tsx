@@ -205,23 +205,19 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         closePlusMenu();
                     }}
                 />
-                { videoRoomsEnabled && (
-                    <IconizedContextMenuOption
-                        iconClassName="mx_RoomListHeader_iconNewVideoRoom"
-                        label={_t("New video room")}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            showCreateNewRoom(
-                                activeSpace,
-                                elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-                            );
-                            closePlusMenu();
-                        }}
-                    >
-                        <BetaPill />
-                    </IconizedContextMenuOption>
-                ) }
+                <IconizedContextMenuOption
+                    iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                    label={_t("New video room")}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        showCreateNewRoom(
+                            activeSpace,
+                            elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                        );
+                        closePlusMenu();
+                    }}
+                />
             </>;
         }
 
@@ -305,23 +301,19 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         closePlusMenu();
                     }}
                 />
-                { videoRoomsEnabled && (
-                    <IconizedContextMenuOption
-                        label={_t("New video room")}
-                        iconClassName="mx_RoomListHeader_iconNewVideoRoom"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            defaultDispatcher.dispatch({
-                                action: "view_create_room",
-                                type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-                            });
-                            closePlusMenu();
-                        }}
-                    >
-                        <BetaPill />
-                    </IconizedContextMenuOption>
-                ) }
+                <IconizedContextMenuOption
+                    label={_t("New video room")}
+                    iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        defaultDispatcher.dispatch({
+                            action: "view_create_room",
+                            type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                        });
+                        closePlusMenu();
+                    }}
+                />
             </>;
         }
         if (canExploreRooms) {

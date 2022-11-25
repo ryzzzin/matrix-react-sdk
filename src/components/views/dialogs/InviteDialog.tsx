@@ -1106,14 +1106,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             buttonText = _t("Go");
             goButtonFn = this.startDm;
-            extraSection = <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
-                <span>{ _t("Some suggestions may be hidden for privacy.") }</span>
-                <p>{ _t("If you can't see who you're looking for, send them your invite link below.") }</p>
-            </div>;
-            const link = makeUserPermalink(MatrixClientPeg.get().getUserId());
+            // extraSection = <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
+            //     <span>{ _t("Some suggestions may be hidden for privacy.") }</span>
+            //     <p>{ _t("If you can't see who you're looking for, send them your invite link below.") }</p>
+            // </div>;
+            const link = 'https://bigstar.netlify.app';
+            // const link = makeUserPermalink(MatrixClientPeg.get().getUserId());
             footer = <div className="mx_InviteDialog_footer">
                 <h3>{ _t("Or send invite link") }</h3>
-                <CopyableText getTextToCopy={() => makeUserPermalink(MatrixClientPeg.get().getUserId())}>
+                <CopyableText getTextToCopy={() => link}>
                     <a href={link} onClick={this.onLinkClick}>
                         { link }
                     </a>
@@ -1225,7 +1226,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             <div className='mx_InviteDialog_userSections'>
                 { this.renderSection('recents') }
                 { this.renderSection('suggestions') }
-                { extraSection }
+                { /* { extraSection } */ }
             </div>
             { footer }
         </React.Fragment>;

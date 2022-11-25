@@ -736,7 +736,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     { name }
                     { searchStatus }
                     { topicElement }
-                    { betaPill }
+                    { /* { betaPill } */ }
                     { buttons }
                 </div>
                 { !isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} /> }

@@ -769,7 +769,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         <h4 id="mx_SpotlightDialog_section_publicRooms">
                             { _t("Suggestions") }
                         </h4>
-                        <div className="mx_SpotlightDialog_options">
+                        {
+                        /* <div className="mx_SpotlightDialog_options">
                             { exploringPublicSpacesEnabled && <>
                                 <LabelledCheckbox
                                     label={_t("Show rooms")}
@@ -787,7 +788,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 config={config ?? null}
                                 setConfig={setConfig}
                             />
-                        </div>
+                        </div> */
+                        }
                     </div>
                     <div> { (showRooms || showSpaces)
                         ? results[Section.PublicRooms].slice(0, SECTION_LIMIT).map(resultMapper)
@@ -1162,7 +1164,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const activeDescendant = rovingContext.state.activeRef?.current?.id;
 
     return <>
-        <div id="mx_SpotlightDialog_keyboardPrompt">
+        {
+        /* <div id="mx_SpotlightDialog_keyboardPrompt">
             { _t("Use <arrows/> to scroll", {}, {
                 arrows: () => <>
                     <kbd>↓</kbd>
@@ -1171,7 +1174,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     { !filter !== null && !query && <kbd>→</kbd> }
                 </>,
             }) }
-        </div>
+        </div> */
+        }
 
         <BaseDialog
             className="mx_SpotlightDialog"
@@ -1230,7 +1234,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 { content }
             </div>
 
-            <div className="mx_SpotlightDialog_footer">
+            {
+            /* <div className="mx_SpotlightDialog_footer">
                 { openFeedback && _t("Results not as expected? Please <a>give feedback</a>.", {}, {
                     a: sub => <AccessibleButton kind="link_inline" onClick={openFeedback}>
                         { sub }
@@ -1242,7 +1247,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 >
                     { _t("Feedback") }
                 </AccessibleButton> }
-            </div>
+            </div> */
+            }
         </BaseDialog>
     </>;
 };

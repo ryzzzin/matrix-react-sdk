@@ -137,28 +137,24 @@ const SpaceLandingAddButton = ({ space }) => {
                             }
                         }}
                     />
-                    { videoRoomsEnabled && (
-                        <IconizedContextMenuOption
-                            label={_t("New video room")}
-                            iconClassName="mx_RoomList_iconNewVideoRoom"
-                            onClick={async (e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                closeMenu();
+                    <IconizedContextMenuOption
+                        label={_t("New video room")}
+                        iconClassName="mx_RoomList_iconNewVideoRoom"
+                        onClick={async (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMenu();
 
-                                if (
-                                    await showCreateNewRoom(
-                                        space,
-                                        elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-                                    )
-                                ) {
-                                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                                }
-                            }}
-                        >
-                            <BetaPill />
-                        </IconizedContextMenuOption>
-                    ) }
+                            if (
+                                await showCreateNewRoom(
+                                    space,
+                                    elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                                )
+                            ) {
+                                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                            }
+                        }}
+                    />
                 </> }
                 <IconizedContextMenuOption
                     label={_t("Add existing room")}

@@ -154,17 +154,17 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             ));
         }
         // Show the Labs tab if enabled or if there are any active betas
-        if (SdkConfig.get("show_labs_settings")
-            || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
-        ) {
-            tabs.push(new Tab(
-                UserTab.Labs,
-                _td("Labs"),
-                "mx_UserSettingsDialog_labsIcon",
-                <LabsUserSettingsTab />,
-                "UserSettingsLabs",
-            ));
-        }
+        // if (SdkConfig.get("show_labs_settings")
+        //     || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
+        // ) {
+        //     tabs.push(new Tab(
+        //         UserTab.Labs,
+        //         _td("Labs"),
+        //         "mx_UserSettingsDialog_labsIcon",
+        //         <LabsUserSettingsTab />,
+        //         "UserSettingsLabs",
+        //     ));
+        // }
         if (this.state.mjolnirEnabled) {
             tabs.push(new Tab(
                 UserTab.Mjolnir,
@@ -174,13 +174,13 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 "UserSettingMjolnir",
             ));
         }
-        tabs.push(new Tab(
-            UserTab.Help,
-            _td("Help & About"),
-            "mx_UserSettingsDialog_helpIcon",
-            <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished(true)} />,
-            "UserSettingsHelpAbout",
-        ));
+        // tabs.push(new Tab(
+        //     UserTab.Help,
+        //     _td("Help & About"),
+        //     "mx_UserSettingsDialog_helpIcon",
+        //     <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished(true)} />,
+        //     "UserSettingsHelpAbout",
+        // ));
 
         return tabs;
     }

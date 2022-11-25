@@ -197,7 +197,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         labsGroup: LabGroup.VoiceAndVideo,
         displayName: _td("Video rooms"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
         // Reload to ensure that the left panel etc. get remounted
         controller: new ReloadOnChangeController(),
         betaInfo: {

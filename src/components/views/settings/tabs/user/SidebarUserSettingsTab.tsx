@@ -56,11 +56,11 @@ const SidebarUserSettingsTab = () => {
         <div className="mx_SettingsTab mx_SidebarUserSettingsTab">
             <div className="mx_SettingsTab_heading">{ _t("Sidebar") }</div>
             <div className="mx_SettingsTab_section">
-                <div className="mx_SettingsTab_subheading">{ _t("Spaces to show") }</div>
+                { /* <div className="mx_SettingsTab_subheading">{ _t("Spaces to show") }</div>
                 <div className="mx_SettingsTab_subsectionText">
                     { _t("Spaces are ways to group rooms and people. " +
                         "Alongside the spaces you're in, you can use some pre-built ones too.") }
-                </div>
+                </div> */ }
 
                 <StyledCheckbox
                     checked={!!homeEnabled}
@@ -116,7 +116,7 @@ const SidebarUserSettingsTab = () => {
                     { _t("Group all your people in one place.") }
                 </div>
 
-                <StyledCheckbox
+                { /* <StyledCheckbox
                     checked={!!orphansEnabled}
                     onChange={onMetaSpaceChangeFactory(MetaSpace.Orphans, "WebSettingsSidebarTabSpacesCheckbox")}
                     className="mx_SidebarUserSettingsTab_orphansCheckbox"
@@ -125,7 +125,7 @@ const SidebarUserSettingsTab = () => {
                 </StyledCheckbox>
                 <div className="mx_SidebarUserSettingsTab_checkboxMicrocopy">
                     { _t("Group all your rooms that aren't part of a space in one place.") }
-                </div>
+                </div> */ }
             </div>
         </div>
     );

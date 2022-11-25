@@ -242,26 +242,22 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                             tooltip={canAddRooms ? undefined
                                 : _t("You do not have permissions to create new rooms in this space")}
                         />
-                        { videoRoomsEnabled && (
-                            <IconizedContextMenuOption
-                                label={_t("New video room")}
-                                iconClassName="mx_RoomList_iconNewVideoRoom"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    closeMenu();
-                                    showCreateNewRoom(
-                                        activeSpace,
-                                        elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-                                    );
-                                }}
-                                disabled={!canAddRooms}
-                                tooltip={canAddRooms ? undefined
-                                    : _t("You do not have permissions to create new rooms in this space")}
-                            >
-                                <BetaPill />
-                            </IconizedContextMenuOption>
-                        ) }
+                        <IconizedContextMenuOption
+                            label={_t("New video room")}
+                            iconClassName="mx_RoomList_iconNewVideoRoom"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                closeMenu();
+                                showCreateNewRoom(
+                                    activeSpace,
+                                    elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                                );
+                            }}
+                            disabled={!canAddRooms}
+                            tooltip={canAddRooms ? undefined
+                                : _t("You do not have permissions to create new rooms in this space")}
+                        />
                         <IconizedContextMenuOption
                             label={_t("Add existing room")}
                             iconClassName="mx_RoomList_iconAddExistingRoom"
@@ -293,23 +289,19 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                         PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                     }}
                 />
-                { videoRoomsEnabled && (
-                    <IconizedContextMenuOption
-                        label={_t("New video room")}
-                        iconClassName="mx_RoomList_iconNewVideoRoom"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            closeMenu();
-                            defaultDispatcher.dispatch({
-                                action: "view_create_room",
-                                type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-                            });
-                        }}
-                    >
-                        <BetaPill />
-                    </IconizedContextMenuOption>
-                ) }
+                <IconizedContextMenuOption
+                    label={_t("New video room")}
+                    iconClassName="mx_RoomList_iconNewVideoRoom"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+                        defaultDispatcher.dispatch({
+                            action: "view_create_room",
+                            type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                        });
+                    }}
+                />
             </> }
             <IconizedContextMenuOption
                 label={_t("Explore public rooms")}

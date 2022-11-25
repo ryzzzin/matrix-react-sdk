@@ -190,6 +190,8 @@ const PeopleButton = ({ selected, isPanelCollapsed }: MetaSpaceButtonProps) => {
 };
 
 const OrphansButton = ({ selected, isPanelCollapsed }: MetaSpaceButtonProps) => {
+    return <></>;
+
     return <MetaSpaceButton
         spaceKey={MetaSpace.Orphans}
         className="mx_SpaceButton_orphans"
@@ -228,7 +230,7 @@ const CreateSpaceButton = ({
         })}
         role="treeitem"
     >
-        <SpaceButton
+        { /* <SpaceButton
             data-testid='create-space-button'
             className={classNames("mx_SpaceButton_new", {
                 mx_SpaceButton_newCancel: menuDisplayed,
@@ -237,7 +239,7 @@ const CreateSpaceButton = ({
             onClick={onNewClick}
             isNarrow={isPanelCollapsed}
             ref={handle}
-        />
+        /> */ }
 
         { contextMenu }
     </li>;
