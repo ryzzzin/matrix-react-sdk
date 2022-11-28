@@ -300,7 +300,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
                             className="mx_RoomView_messagePanel"
                             resizeNotifier={props.resizeNotifier}
                         >
-                            { encryptionTile }
+                            { /* { encryptionTile } */ }
                             <NewRoomIntro />
                         </ScrollPanel>
                     </div>
