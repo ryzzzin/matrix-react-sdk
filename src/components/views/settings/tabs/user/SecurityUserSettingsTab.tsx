@@ -397,7 +397,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 { warning }
                 { devicesSection }
-                <div className="mx_SettingsTab_heading">{ _t("Encryption") }</div>
+                { /* <div className="mx_SettingsTab_heading">{ _t("Encryption") }</div>
                 <div className="mx_SettingsTab_section">
                     { secureBackup }
                     { eventIndex }
@@ -405,7 +405,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <CryptographyPanel />
                 </div>
                 { privacySection }
-                { advancedSection }
+                { advancedSection } */ }
             </div>
         );
     }

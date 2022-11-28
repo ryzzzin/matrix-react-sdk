@@ -179,17 +179,17 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Preferences") }</div>
 
-                { roomListSettings.length > 0 &&
+                { /* { roomListSettings.length > 0 &&
                     <div className="mx_SettingsTab_section">
                         <span className="mx_SettingsTab_subheading">{ _t("Room list") }</span>
                         { this.renderGroup(roomListSettings) }
                     </div>
-                }
+                } */ }
 
-                <div className="mx_SettingsTab_section">
+                { /* <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT) }
-                </div>
+                </div> */ }
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Keyboard shortcuts") }</span>
@@ -230,10 +230,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     { this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS) }
                 </div>
 
-                <div className="mx_SettingsTab_section">
+                { /* <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Code blocks") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS) }
-                </div>
+                </div> */ }
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Images, GIFs and videos") }</span>
@@ -245,7 +245,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     { this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS) }
                 </div>
 
-                <div className="mx_SettingsTab_section">
+                { /* <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("General") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS) }
 
@@ -277,7 +277,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         type='number'
                         value={this.state.readMarkerOutOfViewThresholdMs}
                         onChange={this.onReadMarkerOutOfViewThresholdMs} />
-                </div>
+                </div> */ }
             </div>
         );
     }

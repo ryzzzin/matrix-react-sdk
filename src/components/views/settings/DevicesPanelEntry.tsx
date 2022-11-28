@@ -148,7 +148,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
             </form> :
             <React.Fragment>
                 { signOutButton }
-                { verifyButton }
+                { /* { verifyButton } */ }
                 <AccessibleButton kind="primary_outline" onClick={this.onRename}>
                     { _t("Rename") }
                 </AccessibleButton>

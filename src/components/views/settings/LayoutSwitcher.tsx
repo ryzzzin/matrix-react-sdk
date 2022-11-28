@@ -73,7 +73,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                 </span>
 
                 <div className="mx_LayoutSwitcher_RadioButtons">
-                    <label className={ircClasses}>
+                    { /* <label className={ircClasses}>
                         <EventTilePreview
                             className="mx_LayoutSwitcher_RadioButton_preview"
                             message={this.props.messagePreviewText}
@@ -90,7 +90,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                         >
                             { _t("IRC (Experimental)") }
                         </StyledRadioButton>
-                    </label>
+                    </label> */ }
                     <label className={groupClasses}>
                         <EventTilePreview
                             className="mx_LayoutSwitcher_RadioButton_preview"

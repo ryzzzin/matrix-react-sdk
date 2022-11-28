@@ -304,7 +304,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
             }
 
             return <React.Fragment>
-                <hr />
+                { /* <hr />
                 <div className="mx_DevicesPanel_header">
                     <div className="mx_DevicesPanel_header_trust">
                         { trustIcon }
@@ -313,7 +313,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                         { title }
                     </div>
                     { selectButton }
-                </div>
+                </div> */ }
                 { deviceList.map(this.renderDevice) }
             </React.Fragment>;
         };

@@ -193,7 +193,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                             data-testid='voice-echo-cancellation'
                         />
                     </div>
-                    <div className="mx_SettingsTab_section">
+                    { /* <div className="mx_SettingsTab_section">
                         <span className="mx_SettingsTab_subheading">{ _t("Connection") }</span>
                         <SettingsFlag
                             name='webRtcAllowPeerToPeer'
@@ -205,7 +205,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                             level={SettingLevel.DEVICE}
                             onChange={this.changeFallbackICEServerAllowed}
                         />
-                    </div>
+                    </div> */ }
                 </div>
             </div>
         );

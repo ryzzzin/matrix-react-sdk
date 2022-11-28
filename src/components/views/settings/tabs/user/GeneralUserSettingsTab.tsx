@@ -333,8 +333,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     onMsisdnsChange={this.onMsisdnsChange}
                 />;
             threepidSection = <div>
-                <span className="mx_SettingsTab_subheading">{ _t("Email addresses") }</span>
-                { emails }
+                { /* <span className="mx_SettingsTab_subheading">{ _t("Email addresses") }</span>
+                { emails } */ }
 
                 <span className="mx_SettingsTab_subheading">{ _t("Phone numbers") }</span>
                 { msisdns }
@@ -353,10 +353,10 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{ _t("Account") }</span>
-                <p className="mx_SettingsTab_subsectionText">
+                { /* <p className="mx_SettingsTab_subsectionText">
                     { passwordChangeText }
                 </p>
-                { passwordChangeForm }
+                { passwordChangeForm } */ }
                 { threepidSection }
             </div>
         );
@@ -421,8 +421,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         const msisdns = this.state.loading3pids ? <Spinner /> : <DiscoveryPhoneNumbers msisdns={this.state.msisdns} />;
 
         const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
-            <span className="mx_SettingsTab_subheading">{ _t("Email addresses") }</span>
-            { emails }
+            { /* <span className="mx_SettingsTab_subheading">{ _t("Email addresses") }</span>
+            { emails } */ }
 
             <span className="mx_SettingsTab_subheading">{ _t("Phone numbers") }</span>
             { msisdns }
@@ -432,7 +432,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             <div className="mx_SettingsTab_section">
                 { threepidSection }
                 { /* has its own heading as it includes the current identity server */ }
-                <SetIdServer missingTerms={false} />
+                { /* <SetIdServer missingTerms={false} /> */ }
             </div>
         );
     }
@@ -458,7 +458,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         return (
             <div className="mx_SettingsTab_section">
                 { /* has its own heading as it includes the current integration manager */ }
-                <SetIntegrationManager />
+                { /* <SetIntegrationManager /> */ }
             </div>
         );
     }
