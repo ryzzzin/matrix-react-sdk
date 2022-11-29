@@ -79,6 +79,7 @@ const onReject = () => {
 };
 
 export const showToast = (kind: Kind) => {
+    return;
     if (SecurityCustomisations.setupEncryptionNeeded?.(kind)) {
         return;
     }

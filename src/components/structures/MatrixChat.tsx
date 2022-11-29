@@ -2006,19 +2006,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </div>
             );
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
-            view = (
-                <CompleteSecurity
-                    onFinished={this.onCompleteSecurityE2eSetupFinished}
-                />
-            );
+            this.onCompleteSecurityE2eSetupFinished();
         } else if (this.state.view === Views.E2E_SETUP) {
-            view = (
-                <E2eSetup
-                    onFinished={this.onCompleteSecurityE2eSetupFinished}
-                    accountPassword={this.accountPassword}
-                    tokenLogin={!!this.tokenLogin}
-                />
-            );
+            this.onCompleteSecurityE2eSetupFinished();
         } else if (this.state.view === Views.LOGGED_IN) {
             // store errors stop the client syncing and require user intervention, so we'll
             // be showing a dialog. Don't show anything else.
