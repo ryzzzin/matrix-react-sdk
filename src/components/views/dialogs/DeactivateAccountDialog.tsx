@@ -178,7 +178,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         if (this.state.authData && this.state.authEnabled) {
             auth = (
                 <div>
-                    { this.state.bodyText }
+                    { /* { this.state.bodyText } */ }
                     <InteractiveAuth
                         matrixClient={MatrixClientPeg.get()}
                         authData={this.state.authData}

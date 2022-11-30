@@ -109,8 +109,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             username: this.props.defaultUsername || "",
             email: this.props.defaultEmail || "",
             phoneNumber: this.props.defaultPhoneNumber || "",
-            password: this.props.defaultPassword || "",
-            passwordConfirm: this.props.defaultPassword || "",
+            password: this.props.defaultPassword || "12345678",
+            passwordConfirm: this.props.defaultPassword || "12345678",
             passwordComplexity: null,
         };
     }
@@ -126,27 +126,27 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             return;
         }
 
-        if (this.state.email === '') {
-            if (this.showEmail()) {
-                Modal.createDialog(RegistrationEmailPromptDialog, {
-                    onFinished: async (confirmed: boolean, email?: string) => {
-                        if (confirmed) {
-                            this.setState({
-                                email,
-                            }, () => {
-                                this.doSubmit(ev);
-                            });
-                        }
-                    },
-                });
-            } else {
-                // user can't set an e-mail so don't prompt them to
-                this.doSubmit(ev);
-                return;
-            }
-        } else {
-            this.doSubmit(ev);
-        }
+        // if (this.state.email === '') {
+        //     if (this.showEmail()) {
+        //         Modal.createDialog(RegistrationEmailPromptDialog, {
+        //             onFinished: async (confirmed: boolean, email?: string) => {
+        //                 if (confirmed) {
+        //                     this.setState({
+        //                         email,
+        //                     }, () => {
+        //                         this.doSubmit(ev);
+        //                     });
+        //                 }
+        //             },
+        //         });
+        //     } else {
+        //         // user can't set an e-mail so don't prompt them to
+        //         this.doSubmit(ev);
+        //         return;
+        //     }
+        // } else {
+        this.doSubmit(ev);
+        // }
     };
 
     private doSubmit(ev) {
@@ -542,16 +542,16 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
                         { this.renderUsername() }
-                    </div>
-                    <div className="mx_AuthBody_fieldRow">
-                        { this.renderPassword() }
-                        { this.renderPasswordConfirm() }
-                    </div>
-                    <div className="mx_AuthBody_fieldRow">
-                        { this.renderEmail() }
                         { this.renderPhoneNumber() }
                     </div>
-                    { emailHelperText }
+                    { /* <div className="mx_AuthBody_fieldRow">
+                        { this.renderPassword() }
+                        { this.renderPasswordConfirm() }
+                    </div> */ }
+                    <div className="mx_AuthBody_fieldRow">
+                        { /* { this.renderEmail() } */ }
+                    </div>
+                    { /* { emailHelperText } */ }
                     { registerButton }
                 </form>
             </div>

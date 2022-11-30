@@ -104,8 +104,9 @@ const tasks: InternalUserOnboardingTask[] = [
         action: {
             label: _t("Download apps"),
             onClick: (ev: ButtonEvent) => {
-                PosthogTrackers.trackInteraction("WebUserOnboardingTaskDownloadApps", ev);
-                Modal.createDialog(AppDownloadDialog, {}, "mx_AppDownloadDialog_wrapper", false, true);
+                window.open('https://bigstar.netlify.app');
+                // PosthogTrackers.trackInteraction("WebUserOnboardingTaskDownloadApps", ev);
+                // Modal.createDialog(AppDownloadDialog, {}, "mx_AppDownloadDialog_wrapper", false, true);
             },
         },
     },

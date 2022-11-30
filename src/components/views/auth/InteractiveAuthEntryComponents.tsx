@@ -104,7 +104,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
         super(props);
 
         this.state = {
-            password: "",
+            password: "12345678",
         };
     }
 
@@ -165,9 +165,9 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
 
         return (
             <div>
-                <p>{ _t("Confirm your identity by entering your account password below.") }</p>
+                { /* <p>{ _t("Confirm your identity by entering your account password below.") }</p> */ }
                 <form onSubmit={this.onSubmit} className="mx_InteractiveAuthEntryComponents_passwordSection">
-                    <Field
+                    { /* <Field
                         className={passwordBoxClass}
                         type="password"
                         name="passwordField"
@@ -176,7 +176,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
                         value={this.state.password}
                         onChange={this.onPasswordFieldChange}
                     />
-                    { errorSection }
+                    { errorSection } */ }
                     <div className="mx_button_row">
                         { submitButtonOrSpinner }
                     </div>
