@@ -25,6 +25,10 @@ import withValidation, { IValidationResult } from "../elements/Validation";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
 import EmailField from "./EmailField";
+import OtpModal from './OtpModal';
+import { firebaseAuth } from './firebase';
+import firebase from 'firebase';
+import { COUNTRIES } from '../../../phonenumber';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -41,6 +45,7 @@ interface IProps {
 
     onSubmit(username: string, phoneCountry: void, phoneNumber: void, password: string): void;
     onSubmit(username: void, phoneCountry: string, phoneNumber: string, password: string): void;
+    onSubmit(username: string, phoneCountry: string, phoneNumber: string, password: string): void;
     onUsernameChanged?(username: string): void;
     onUsernameBlur?(username: string): void;
     onPhoneCountryChanged?(phoneCountry: string): void;
@@ -52,6 +57,8 @@ interface IState {
     fieldValid: Partial<Record<LoginField, boolean>>;
     loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone;
     password: "";
+    final: any;
+    showOtp: boolean;
 }
 
 enum LoginField {
@@ -80,8 +87,10 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         this.state = {
             // Field error codes by field ID
             fieldValid: {},
-            loginType: LoginField.MatrixId,
+            loginType: LoginField.Phone,
             password: "",
+            final: null,
+            showOtp: false,
         };
     }
 
@@ -89,6 +98,45 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onForgotPasswordClick();
+    };
+
+    private sendOtp = ev => {
+        ev.preventDefault();
+
+        const phoneCountry = this.props.phoneCountry;
+        const phoneNumber = this.props.phoneNumber;
+
+        const verify = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        const countryPrefix = COUNTRIES.find((c) => c.iso2 == phoneCountry).prefix;
+        const phone = `+${countryPrefix}${phoneNumber}`;
+        console.log(phone);
+
+        firebaseAuth.signInWithPhoneNumber(phone, verify).then((result) => {
+            this.setState({ final: result, showOtp: true });
+        })
+            .catch((err) => {
+                console.error(err);
+                // window.location.reload();
+            });
+    };
+
+    private verifyOtp = (otp: string) => {
+        console.log(otp);
+
+        if (otp === null || this.state.final === null) {
+            return;
+        }
+
+        this.state.final.confirm(otp).then((result) => {
+            const phoneCountry = this.props.phoneCountry;
+            const phoneNumber = this.props.phoneNumber;
+
+            this.props.onSubmit('', phoneCountry, phoneNumber, "12345678");
+            this.setState({ showOtp: false });
+        }).catch((err) => {
+            console.error(err);
+            alert("Wrong code");
+        });
     };
 
     private onSubmitForm = async ev => {
@@ -114,7 +162,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 break;
         }
 
-        this.props.onSubmit(username, phoneCountry, phoneNumber, this.state.password);
+        this.props.onSubmit(username, phoneCountry, phoneNumber, "12345678");
     };
 
     private onUsernameChanged = ev => {
@@ -410,10 +458,10 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
 
         return (
             <div>
-                <form onSubmit={this.onSubmitForm}>
-                    { loginType }
+                <form onSubmit={this.sendOtp}>
+                    { /* { loginType } */ }
                     { loginField }
-                    <Field
+                    { /* <Field
                         id="mx_LoginForm_password"
                         className={pwFieldClass}
                         autoComplete="current-password"
@@ -427,13 +475,21 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         onValidate={this.onPasswordValidate}
                         ref={field => this[LoginField.Password] = field}
                     />
-                    { forgotPasswordJsx }
+                    { forgotPasswordJsx } */ }
+                    <div id="recaptcha-container" />
                     { !this.props.busy && <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}
                         disabled={this.props.disableSubmit}
                     /> }
                 </form>
+                {
+                    this.state.showOtp &&
+                    <OtpModal
+                        onSend={(otp) => this.verifyOtp(otp)}
+                        onClose={() => this.setState({ showOtp: false })}
+                    />
+                }
             </div>
         );
     }

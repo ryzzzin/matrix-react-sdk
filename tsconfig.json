@@ -27,5 +27,5 @@
     "./src/**/*.tsx",
     "./test/**/*.ts",
     "./test/**/*.tsx"
-  ]
+, "src/components/views/auth/firebase.ts"  ]
 }

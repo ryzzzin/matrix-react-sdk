@@ -1,0 +1,60 @@
+.mx_otpmodal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, .4);
+
+  &__content {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__heading {
+    margin: 0 !important;
+    font-weight: 700;
+  }
+
+  &__description {
+    margin: 0;
+    font-size: 16px;
+    color: #a9a9a9;
+  }
+
+  &__inputs {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__input {
+    border: 0;
+    background: none;
+    font-size: 24px;
+    border-bottom: 2px solid #9004E3;
+    width: 24px;
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__submit {
+    margin: 0;
+  }
+}
