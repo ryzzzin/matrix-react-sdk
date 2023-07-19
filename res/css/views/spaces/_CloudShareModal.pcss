@@ -1,0 +1,78 @@
+.mx_cloudsharemodal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 101;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, .4);
+
+  cursor: pointer;
+
+  &__content {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    cursor: initial;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 70%;
+  }
+
+  &__header {
+    display: flex;
+  }
+
+  &__heading {
+    padding: 0;
+    margin: 0 0 16px 0;
+  }
+  
+  &__main {
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__form {
+    height: 250px;
+    width: 100%;
+
+    #fileInput {
+      display: none;
+    }
+  }
+
+  &__fileLabel {
+    cursor: pointer;
+    border-radius: 16px;
+    border: 2px dashed #dedede;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #b5b5b5;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  &__rooms {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__room {
+    width: 100%;
+    cursor: pointer;
+  }
+}

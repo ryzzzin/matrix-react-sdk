@@ -1,0 +1,255 @@
+.mx_cloudmodal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 101;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, .4);
+
+  cursor: pointer;
+
+  &__content {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    cursor: initial;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 70%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 32px;
+  }
+
+  &__heading {
+    padding: 0;
+    margin: 0;
+  }
+
+  &__action {
+    border: none;
+    background: none;
+    color: #9004E3;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+  &__main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__files {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  &__history {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__historyItem {
+  
+  }
+}
+
+.mx_cloudfile {
+  cursor: pointer;
+
+  &__preview {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 116px;
+    height: 116px;
+    border-radius: 16px;
+    background: #fafafa;
+    overflow: hidden;
+    border: 2px solid #efefef;
+    transition: .2s;
+
+    &:hover {
+      background: #f3f3f3;
+      transition: .2s;
+
+      .mx_cloudfile__previewImage {
+        transition: .2s;
+        transform: scale(1.08);
+        border-radius: 12px;
+      }
+
+      .mx_cloudfile__actions {
+        opacity: 1;
+        transition: .2s;
+      }
+    }
+
+    .mx_cloudfile__previewImage {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: .2s;
+    }
+
+    .mx_cloudfile__actions {
+      opacity: 0;
+      transition: .2s;
+    }
+  }
+
+  &__previewPlaceholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 0;
+  }
+
+  &__name {
+    text-align: center;
+    padding: 0;
+    margin-bottom: 8px;
+  }
+
+  &__actions {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__action {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f3f3f3;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    transition: .2s;
+
+    &:hover {
+      transition: .2s;
+      background: #e5e5e5;
+    }
+
+    img {
+      max-width: 20px;
+      max-height: 20px;
+    }
+  }
+}
+
+.mx_cloudhistory {
+  display: flex;
+  gap: 64px;
+
+  &__preview {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 8px;
+    background: #fafafa;
+    overflow: hidden;
+    border: 2px solid #efefef;
+    transition: .2s;
+
+    &:hover {
+      background: #f3f3f3;
+      transition: .2s;
+
+      .mx_cloudhistory__previewImage {
+        transition: .2s;
+        transform: scale(1.08);
+      }
+    }
+
+    .mx_cloudhistory__previewImage {
+      max-width: 50px;
+      max-height: 50px;
+      border-radius: 4px;
+      object-fit: contain;
+      transition: .2s;
+    }
+  }
+
+  &__previewPlaceholder {
+    width: 25px;
+    height: 25px;
+    border-radius: 0;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 12px;
+  }
+
+  &__name {
+    padding: 0;
+    font-size: 16px;
+    margin-bottom: 4px;
+    margin: 0;
+  }
+
+  &__date {
+    text-align: center;
+    color: #bbbbbb;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__main {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__action {
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &--reject {
+      color: #FF5B55;
+    }
+
+    &--accept {
+      color: #9004E3;
+    }
+  }
+}

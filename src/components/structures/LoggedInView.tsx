@@ -71,6 +71,9 @@ import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload
 import { IConfigOptions } from "../../IConfigOptions";
 import LeftPanelLiveShareWarning from '../views/beacon/LeftPanelLiveShareWarning';
 import { UserOnboardingPage } from '../views/user-onboarding/UserOnboardingPage';
+import CloudModal from '../views/spaces/CloudModal';
+import CloudShareModal from '../views/spaces/CloudShareModal';
+import firebase from 'firebase';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -105,8 +108,16 @@ interface IProps {
     forceTimeline?: boolean; // see props on MatrixChat
 }
 
+export enum SpaceModal {
+    Cloud,
+    CloudShare,
+    None,
+}
+
 interface IState {
     syncErrorData?: ISyncStateData;
+    showingSpaceModal: SpaceModal;
+    isCloudReviewModal: boolean;
     usageLimitDismissed: boolean;
     usageLimitEventContent?: IUsageLimit;
     usageLimitEventTs?: number;
@@ -114,6 +125,8 @@ interface IState {
     activeCalls: Array<MatrixCall>;
     backgroundImage?: string;
 }
+
+
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -141,6 +154,8 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this.state = {
             syncErrorData: undefined,
+            showingSpaceModal: SpaceModal.None,
+            isCloudReviewModal: false,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
             usageLimitDismissed: false,
@@ -189,6 +204,21 @@ class LoggedInView extends React.Component<IProps, IState> {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         this.loadResizerPreferences();
         this.refreshBackgroundImage();
+
+        const db = firebase.firestore();
+        const userId = this._matrixClient.credentials.userId;
+        db.collection('cloud')
+            .where('recipientID', '==', userId)
+            .where('status', '==', 'Pending')
+            .onSnapshot((querySnapshot) => {
+                if (querySnapshot && querySnapshot.docs.length > 0) {
+                    this.setState({ isCloudReviewModal: true });
+                    this.setState({ showingSpaceModal: SpaceModal.Cloud });
+                } else {
+                    this.setState({ isCloudReviewModal: false });
+                    this.setState({ showingSpaceModal: SpaceModal.None });
+                }
+            });
     }
 
     componentWillUnmount() {
@@ -203,6 +233,10 @@ class LoggedInView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.resizer.detach();
     }
+
+    private setShowingSpaceModal = (modal: SpaceModal) => {
+        this.setState({ showingSpaceModal: modal });
+    };
 
     private onCallState = (): void => {
         const activeCalls = LegacyCallHandler.instance.getAllActiveCalls();
@@ -656,6 +690,11 @@ class LoggedInView extends React.Component<IProps, IState> {
             );
         });
 
+        const cloudModalCloseHandler = () => {
+            this.setShowingSpaceModal(SpaceModal.None);
+            this.setState({ isCloudReviewModal: false });
+        };
+
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <div
@@ -673,7 +712,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                                     blurMultiplier={0.5}
                                     backgroundImage={this.state.backgroundImage}
                                 />
-                                <SpacePanel />
+                                <SpacePanel setShowingSpaceModal={this.setShowingSpaceModal} />
                                 <BackdropPanel
                                     backgroundImage={this.state.backgroundImage}
                                 />
@@ -700,6 +739,19 @@ class LoggedInView extends React.Component<IProps, IState> {
                 <NonUrgentToastContainer />
                 <HostSignupContainer />
                 { audioFeedArraysForCalls }
+                {
+                    this.state.showingSpaceModal == SpaceModal.Cloud &&
+                    <CloudModal
+                        onClose={cloudModalCloseHandler}
+                        reviewMode={this.state.isCloudReviewModal}
+                    />
+                }
+                {
+                    this.state.showingSpaceModal == SpaceModal.CloudShare &&
+                    <CloudShareModal
+                        onClose={() => this.setShowingSpaceModal(SpaceModal.None)}
+                    />
+                }
             </MatrixClientContext.Provider>
         );
     }

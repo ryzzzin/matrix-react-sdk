@@ -72,6 +72,7 @@ import { NotificationState } from "../../../stores/notifications/NotificationSta
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import { SpaceModal } from "../../structures/LoggedInView";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -254,15 +255,41 @@ const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
 
 interface IInnerSpacePanelProps extends DroppableProvidedProps {
     children?: ReactNode;
+    setShowingSpaceModal: (modal: SpaceModal) => void;
     isPanelCollapsed: boolean;
     setPanelCollapsed: Dispatch<SetStateAction<boolean>>;
     isDraggingOver: boolean;
     innerRef: RefCallback<HTMLElement>;
 }
 
+const CloudButton = ({ isPanelCollapsed, onClick }) => {
+    return (
+        <MetaSpaceButton
+            className="mx_SpaceButton_cloud"
+            selected={false}
+            isPanelCollapsed={isPanelCollapsed}
+            label="Облако"
+            onClick={onClick}
+        />
+    );
+};
+
+const CloudShareButton = ({ isPanelCollapsed, onClick }) => {
+    return (
+        <MetaSpaceButton
+            className="mx_SpaceButton_cloudshare"
+            selected={false}
+            isPanelCollapsed={isPanelCollapsed}
+            label="Отправить файл"
+            onClick={onClick}
+        />
+    );
+};
+
 // Optimisation based on https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/api/droppable.md#recommended-droppable--performance-optimisation
 const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({
     children,
+    setShowingSpaceModal,
     isPanelCollapsed,
     setPanelCollapsed,
     isDraggingOver,
@@ -289,6 +316,8 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({
         aria-label={_t("Spaces")}
     >
         { metaSpacesSection }
+        <CloudButton isPanelCollapsed={isPanelCollapsed} onClick={() => setShowingSpaceModal(SpaceModal.Cloud)} />
+        <CloudShareButton isPanelCollapsed={isPanelCollapsed} onClick={() => setShowingSpaceModal(SpaceModal.CloudShare)} />
         { invites.map(s => (
             <SpaceItem
                 key={s.roomId}
@@ -324,7 +353,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({
     </IndicatorScrollbar>;
 });
 
-const SpacePanel = () => {
+const SpacePanel = ({ setShowingSpaceModal }) => {
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLDivElement>();
     useLayoutEffect(() => {
@@ -373,6 +402,7 @@ const SpacePanel = () => {
                             { (provided, snapshot) => (
                                 <InnerSpacePanel
                                     {...provided.droppableProps}
+                                    setShowingSpaceModal={setShowingSpaceModal}
                                     isPanelCollapsed={isPanelCollapsed}
                                     setPanelCollapsed={setPanelCollapsed}
                                     isDraggingOver={snapshot.isDraggingOver}

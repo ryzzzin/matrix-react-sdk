@@ -197,6 +197,8 @@ $activeBorderColor: $primary-content;
         }
 
         &.mx_SpaceButton_home,
+        &.mx_SpaceButton_cloud,
+        &.mx_SpaceButton_cloudshare,
         &.mx_SpaceButton_favourites,
         &.mx_SpaceButton_people,
         &.mx_SpaceButton_orphans {
@@ -211,6 +213,14 @@ $activeBorderColor: $primary-content;
 
         &.mx_SpaceButton_home .mx_SpaceButton_icon::before {
             mask-image: url('$(res)/img/element-icons/home.svg');
+        }
+
+        &.mx_SpaceButton_cloud .mx_SpaceButton_icon::before {
+            mask-image: url('$(res)/img/element-icons/roomlist/cloud.svg');
+        }
+
+        &.mx_SpaceButton_cloudshare .mx_SpaceButton_icon::before {
+            mask-image: url('$(res)/img/element-icons/roomlist/cloudshare.svg');
         }
 
         &.mx_SpaceButton_favourites .mx_SpaceButton_icon::before {
