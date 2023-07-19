@@ -349,20 +349,22 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
                         </p>
                     </div>
                 </div>
-                <div className="mx_cloudhistory__actions">
-                    <button
-                        className="mx_cloudhistory__action mx_cloudhistory__action--reject"
-                        onClick={() => rejectPendingFile(history)}
-                    >
-                        Отклонить
-                    </button>
-                    <button
-                        className="mx_cloudhistory__action mx_cloudhistory__action--accept"
-                        onClick={() => acceptPendingFile(history)}
-                    >
-                        Принять
-                    </button>
-                </div>
+                { reviewMode && (
+                    <div className="mx_cloudhistory__actions">
+                        <button
+                            className="mx_cloudhistory__action mx_cloudhistory__action--reject"
+                            onClick={() => rejectPendingFile(history)}
+                        >
+                            Отклонить
+                        </button>
+                        <button
+                            className="mx_cloudhistory__action mx_cloudhistory__action--accept"
+                            onClick={() => acceptPendingFile(history)}
+                        >
+                            Принять
+                        </button>
+                    </div>
+                ) }
             </div>
         );
     };
