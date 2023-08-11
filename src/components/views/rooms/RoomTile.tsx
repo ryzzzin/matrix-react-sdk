@@ -18,6 +18,7 @@ limitations under the License.
 import React, { createRef } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
+import ReactDOM from "react-dom";
 
 import type { Call } from "../../../models/Call";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -48,6 +49,8 @@ import { RoomTileCallSummary } from "./RoomTileCallSummary";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
 import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import ContentMessages from "../../../ContentMessages";
+import CloudShareModal from "../spaces/CloudShareModal";
 
 interface IProps {
     room: Room;
@@ -56,10 +59,18 @@ interface IProps {
     tag: TagID;
 }
 
+interface IShareModalProps {
+    onClose: () => void;
+    initialFile?: File;
+    initialRoom?: Room;
+}
+
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
 interface IState {
     selected: boolean;
+    isShareModalVisible: boolean;
+    sharingFile?: File;
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
     call: Call | null;
@@ -76,6 +87,21 @@ export const contextMenuBelow = (elementRect: PartialDOMRect) => {
     return { left, top, chevronFace };
 };
 
+class ShareModal extends React.Component<IShareModalProps> {
+    render() {
+        const { onClose, initialFile, initialRoom } = this.props;
+
+        return ReactDOM.createPortal(
+            <CloudShareModal
+                onClose={onClose}
+                initialFile={initialFile}
+                initialRoom={initialRoom}
+            />,
+            document.body,
+        );
+    }
+}
+
 export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
@@ -87,6 +113,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         this.state = {
             selected: SdkContextClass.instance.roomViewStore.getRoomId() === this.props.room.roomId,
+            isShareModalVisible: false,
+            sharingFile: null,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
             call: CallStore.instance.getCall(this.props.room.roomId),
@@ -346,6 +374,30 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
     }
 
+    private openRoom = () => {
+        defaultDispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            show_room_tile: true,
+            room_id: this.props.room.roomId,
+            clear_search: false,
+            metricsTrigger: "RoomList",
+            metricsViaKeyboard: false,
+        });
+    };
+
+    private onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+    private onFileDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+
+        this.openRoom();
+
+        const files = Array.from(event.dataTransfer.files);
+        this.setState({ sharingFile: files[0], isShareModalVisible: true });
+    };
+
     public render(): React.ReactElement {
         const classes = classNames({
             'mx_RoomTile': true,
@@ -449,6 +501,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                             inputRef={ref}
                             className={classes}
                             onClick={this.onTileClick}
+                            onDragOver={this.onDragOver}
+                            onDrop={this.onFileDrop}
                             onContextMenu={this.onContextMenu}
                             role="treeitem"
                             aria-label={ariaLabel}
@@ -468,6 +522,15 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         </Button>
                     }
                 </RovingTabIndexWrapper>
+
+                {
+                    this.state.isShareModalVisible &&
+                    <ShareModal
+                        onClose={() => this.setState({ isShareModalVisible: false })}
+                        initialFile={this.state.sharingFile}
+                        initialRoom={this.props.room}
+                    />
+                }
             </React.Fragment>
         );
     }

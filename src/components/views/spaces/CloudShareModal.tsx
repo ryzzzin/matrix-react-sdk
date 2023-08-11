@@ -6,21 +6,33 @@ import { v4 as uuidv4 } from 'uuid';
 
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import RoomTileCustom from '../rooms/RoomTileCustom';
+import ContentMessages from '../../../ContentMessages';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface Props {
     onClose: () => void;
+    initialFile?: File;
+    initialRoom?: Room;
 }
 
-const CloudShareModal: React.FC<Props> = ({ onClose }) => {
+const CloudShareModal: React.FC<Props> = ({ onClose, initialFile, initialRoom }) => {
     const matrixClient = useContext(MatrixClientContext);
     const [rooms, setRooms] = useState<Room[]>([]);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(initialFile);
 
     useEffect(() => {
         const newRooms = matrixClient.getRooms();
         setRooms(newRooms);
         console.log(rooms);
     }, [matrixClient]);
+
+    const sendFileInRoom = () => {
+        const files = [selectedFile];
+        const roomId = initialRoom.roomId;
+
+        onClose();
+        ContentMessages.sharedInstance().sendContentListToRoom(files, roomId, null, matrixClient);
+    };
 
     async function uploadFileToFirebaseStorage(
         file: File,
@@ -74,7 +86,6 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
     ) {
         const defaultFirestore = firebase.firestore();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        console.log('🚀 - createdAt:', createdAt);
 
         const data = {
             filePath,
@@ -84,7 +95,6 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
             createdAt,
             status: "Pending",
         };
-        console.log('🚀 - data:', data);
 
         defaultFirestore
             .collection('cloud')
@@ -100,8 +110,8 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
             });
     }
 
-    const roomClickHandler = async (room: Room, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        event.stopPropagation();
+    const roomClickHandler = async (room: Room, event?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event?.stopPropagation();
         const senderID = room.myUserId;
         const myProfile = await matrixClient.getProfileInfo(senderID);
         const senderName = myProfile.displayname;
@@ -137,38 +147,71 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
         }
     };
 
+    const UploadView = () => {
+        return (
+            !selectedFile ? (
+                <div className="mx_cloudsharemodal__form">
+                    <label htmlFor="fileInput" className="mx_cloudsharemodal__fileLabel">
+                        Выберите или перетащите файл
+                    </label>
+                    <input id="fileInput" type="file" onChange={handleFileChange} />
+                </div>
+            ) : (
+                <div className="mx_cloudsharemodal__rooms">
+                    { rooms.map((room) => (
+                        <div
+                            className='mx_cloudsharemodal__room'
+                            onClick={(e) => roomClickHandler(room, e)}
+                            key={room.roomId}
+                        >
+                            <RoomTileCustom
+                                room={room}
+                                showMessagePreview={false}
+                                isMinimized={false}
+                                tag=""
+                            />
+                        </div>
+                    )) }
+                </div>
+            )
+        );
+    };
+
+    const SelectionView = () => {
+        return (
+            <div className="mx_cloudsharemodal__selection">
+                <AccessibleButton
+                    kind='primary'
+                    onClick={() => roomClickHandler(initialRoom)}
+                >
+                    Отправить в облако
+                </AccessibleButton>
+                <AccessibleButton
+                    kind='primary'
+                    onClick={sendFileInRoom}
+                >
+                    Отправить в чат
+                </AccessibleButton>
+            </div>
+        );
+    };
+
+    const MainView = () => {
+        return (
+            (initialFile == null)
+                ? <UploadView />
+                : <SelectionView />
+        );
+    };
+
     return (
         <div className='mx_cloudsharemodal' onClick={onClose} onDragOver={handleDragOver} onDrop={handleDrop}>
             <div className='mx_cloudsharemodal__content' onClick={(e) => e.stopPropagation()}>
                 <div className="mx_cloudsharemodal__header">
-                    <h1 className="mx_cloudsharemodal__heading">Отправить файл в облако</h1>
+                    <h1 className="mx_cloudsharemodal__heading">Поделиться файлом</h1>
                 </div>
                 <div className="mx_cloudsharemodal__main">
-                    { !selectedFile ? (
-                        <div className="mx_cloudsharemodal__form">
-                            <label htmlFor="fileInput" className="mx_cloudsharemodal__fileLabel">
-                                Выберите или перетащите файл
-                            </label>
-                            <input id="fileInput" type="file" onChange={handleFileChange} />
-                        </div>
-                    ) : (
-                        <div className="mx_cloudsharemodal__rooms">
-                            { rooms.map((room) => (
-                                <div
-                                    className='mx_cloudsharemodal__room'
-                                    onClick={(e) => roomClickHandler(room, e)}
-                                    key={room.roomId}
-                                >
-                                    <RoomTileCustom
-                                        room={room}
-                                        showMessagePreview={false}
-                                        isMinimized={false}
-                                        tag=""
-                                    />
-                                </div>
-                            )) }
-                        </div>
-                    ) }
+                    <MainView />
                 </div>
             </div>
         </div>

@@ -367,7 +367,6 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
 
         useEffect(() => {
             getFileByPath(history.filePath).then((file) => {
-                console.log('🚀 - getFileByPath - file:', file);
                 setFile(file);
             });
         }, []);
