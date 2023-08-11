@@ -1197,9 +1197,23 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
+    private convertUrl(url: string): string {
+        const baseURL = 'https://bigstar.netlify.app/';
+        const hashIndex = url.indexOf('#/');
+
+        if (hashIndex !== -1) {
+            const hashPart = url.substring(hashIndex);
+            return baseURL + hashPart;
+        }
+
+        return url; // Return the original URL if it doesn't contain '#/'
+    }
+
     private async copyRoom(roomId: string) {
         const roomLink = makeRoomPermalink(roomId);
-        const success = await copyPlaintext(roomLink);
+        const convertedUrl = this.convertUrl(roomLink);
+
+        const success = await copyPlaintext(convertedUrl);
         if (!success) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("Unable to copy room link"),

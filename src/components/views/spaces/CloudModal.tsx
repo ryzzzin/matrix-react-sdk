@@ -33,27 +33,38 @@ interface HistoryItemProps {
     history: CloudStorageFileHistory;
 }
 
+enum ModalView {
+    Files = "files",
+    SentHistory = "sent_history",
+    ReceivedHistory = "received_history",
+    PendingHistory = "pending_history",
+}
+
 const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
+    const initialView = reviewMode ? ModalView.PendingHistory : ModalView.Files;
+    const [currentView, setCurrentView] = useState<ModalView>(initialView);
+
     const [isFilesLoading, setIsFilesLoading] = useState(true);
-    const [isHistoryLoading, setIsHistoryLoading] = useState(true);
-    const [isShowingHistory, setIsShowingHistory] = useState<boolean>(reviewMode);
+    const [isPendingHistoryLoading, setIsPendingHistoryLoading] = useState(true);
+    const [isSentHistoryLoading, setIsSentHistoryLoading] = useState(true);
+    const [isReceivedHistoryLoading, setIsReceivedHistoryLoading] = useState(true);
+
     const [files, setFiles] = useState<CloudStorageFile[]>([]);
-    const [fileHistory, setFileHistory] = useState<CloudStorageFileHistory[]>([]);
+    const [pendingHistory, setPendingHistory] = useState<CloudStorageFileHistory[]>([]);
+    const [sentHistory, setSentHistory] = useState<CloudStorageFileHistory[]>([]);
+    const [receivedHistory, setReceivedHistory] = useState<CloudStorageFileHistory[]>([]);
+
     const [previewFileSrc, setPreviewFileSrc] = useState<string>(null);
     const matrixClient = useContext(MatrixClientContext);
     const userId = matrixClient.credentials.userId;
     console.log(userId);
 
-    const toggleIsShowingHistory = () => {
-        setIsShowingHistory(!isShowingHistory);
-    };
-
     const removeHistory = (documentIDToDelete: string) => {
-        const updatedFileHistory = fileHistory.filter(
+        const updatedFileHistory = pendingHistory.filter(
             (item) => item.documentID !== documentIDToDelete,
         );
 
-        setFileHistory(updatedFileHistory);
+        setPendingHistory(updatedFileHistory);
     };
 
     const updateFiles = async (fileRefs: firebase.storage.Reference[]) => {
@@ -92,10 +103,8 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
     const fetchFiles = () => {
         const storage = firebase.storage();
 
-        // Create a reference under which you want to list
         const listRef = storage.ref(`files/${userId}/saved`);
 
-        // Find all the prefixes and items.
         listRef.listAll()
             .then(async (res) => {
                 console.log(res.prefixes);
@@ -104,49 +113,86 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
                 updateFiles(res.items);
             }).catch((error) => {
                 console.error("ERROR FETCHING FILES");
-            // Uh-oh, an error occurred!
             }).finally(() => {
                 setIsFilesLoading(false);
             });
     };
 
-    useEffect(() => {
-        if (!reviewMode) {
-            fetchFiles();
-        }
-    }, []);
+    const getFormattedDate = (date: any) => {
+        const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        }).format(date.toDate());
+
+        return formattedDate;
+    };
 
     useEffect(() => {
+        fetchFiles();
         const db = firebase.firestore();
-        const status = reviewMode ? 'Pending' : 'Accepted';
 
-        const unsubscribe = db
+        const unsubscribePending = db
             .collection('cloud')
             .where('recipientID', '==', userId)
-            .where('status', '==', status)
+            .where('status', '==', 'Pending')
             .onSnapshot((querySnapshot) => {
-                const updatedFileHistory: CloudStorageFileHistory[] = [];
-
-                querySnapshot.forEach((document) => {
+                const updatedFileHistory = querySnapshot.docs.map((document) => {
                     const documentID = document.id;
                     const { senderName, filePath, createdAt } = document.data();
-                    const formattedDate = new Intl.DateTimeFormat('ru-RU', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    }).format(createdAt.toDate());
+                    const formattedDate = getFormattedDate(createdAt);
 
-                    updatedFileHistory.push({ documentID, senderName, createdAt: formattedDate, filePath });
+                    return { documentID, senderName, createdAt: formattedDate, filePath };
                 });
 
-                setFileHistory(updatedFileHistory);
-                setIsHistoryLoading(false);
+                setPendingHistory(updatedFileHistory);
+                setIsPendingHistoryLoading(false);
             });
 
+        const unsubscribeSent = db
+            .collection('cloud')
+            .where('senderID', '==', userId)
+            .where('status', '==', 'Accepted')
+            .onSnapshot((querySnapshot) => {
+                const updatedFileHistory = querySnapshot.docs.map((document) => {
+                    const documentID = document.id;
+                    const { senderName, filePath, createdAt } = document.data();
+                    const formattedDate = getFormattedDate(createdAt);
+
+                    return { documentID, senderName, createdAt: formattedDate, filePath };
+                });
+
+                setSentHistory(updatedFileHistory);
+                setIsSentHistoryLoading(false);
+            });
+
+        const unsubscribeReceived = db
+            .collection('cloud')
+            .where('recipientID', '==', userId)
+            .where('status', '==', 'Accepted')
+            .onSnapshot((querySnapshot) => {
+                const updatedFileHistory = querySnapshot.docs.map((document) => {
+                    const documentID = document.id;
+                    const { senderName, filePath, createdAt } = document.data();
+                    const formattedDate = getFormattedDate(createdAt);
+
+                    return { documentID, senderName, createdAt: formattedDate, filePath };
+                });
+
+                setReceivedHistory(updatedFileHistory);
+                setIsReceivedHistoryLoading(false);
+            });
+
+        const unsubscribe = () => {
+            unsubscribePending();
+            unsubscribeSent();
+            unsubscribeReceived();
+        };
+
         return () => unsubscribe();
-    }, [userId, reviewMode]);
+    }, [userId]);
 
     function getTruncatedString(str, startLength = 5, endLength = 7) {
         if (str.length <= startLength + endLength) {
@@ -349,7 +395,7 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
                         </p>
                     </div>
                 </div>
-                { reviewMode && (
+                { (currentView == ModalView.PendingHistory) && (
                     <div className="mx_cloudhistory__actions">
                         <button
                             className="mx_cloudhistory__action mx_cloudhistory__action--reject"
@@ -379,14 +425,39 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
         );
     };
 
-    const HistoryList = () => {
+    const HistoryList = ({ history }) => {
         return (
             <div className="mx_cloudmodal__history">
-                { fileHistory.map(history => (
-                    <HistoryItem history={history} key={history.createdAt} />
+                { history.map(historyItem => (
+                    <HistoryItem history={historyItem} key={historyItem.createdAt} />
                 )) }
             </div>
         );
+    };
+
+    const MainView = () => {
+        switch (currentView) {
+            case ModalView.Files:
+                return (isFilesLoading
+                    ? <p>Идет загрузка...</p>
+                    : <FilesList />);
+            case ModalView.SentHistory:
+                return (isSentHistoryLoading
+                    ? <p>Идет загрузка...</p>
+                    : <HistoryList history={sentHistory} />);
+            case ModalView.ReceivedHistory:
+                return (isReceivedHistoryLoading
+                    ? <p>Идет загрузка...</p>
+                    : <HistoryList history={receivedHistory} />);
+            case ModalView.PendingHistory:
+                return (isPendingHistoryLoading
+                    ? <p>Идет загрузка...</p>
+                    : <HistoryList history={pendingHistory} />);
+            default:
+                return (
+                    <p>Произошла ошибка, попробуйте перезайти.</p>
+                );
+        }
     };
 
     return (
@@ -394,23 +465,22 @@ const CloudModal: React.FC<Props> = ({ onClose, reviewMode }) => {
             <div className='mx_cloudmodal__content' onClick={(e) => e.stopPropagation()}>
                 <div className="mx_cloudmodal__header">
                     <h1 className="mx_cloudmodal__heading">Облачное хранилище</h1>
-                    {
-                        !reviewMode &&
-                        <button className="mx_cloudmodal__action" onClick={toggleIsShowingHistory}>
-                            История
-                        </button>
-                    }
+                    { (currentView !== ModalView.PendingHistory) && (
+                        <div className="mx_cloudmodal__actions">
+                            <button className="mx_cloudmodal__action" onClick={() => setCurrentView(ModalView.Files)}>
+                                Мои файлы
+                            </button>
+                            <button className="mx_cloudmodal__action" onClick={() => setCurrentView(ModalView.SentHistory)}>
+                                Отправленные
+                            </button>
+                            <button className="mx_cloudmodal__action" onClick={() => setCurrentView(ModalView.ReceivedHistory)}>
+                                Принятые
+                            </button>
+                        </div>
+                    ) }
                 </div>
                 <div className="mx_cloudmodal__main">
-                    {
-                        isShowingHistory
-                            ? isHistoryLoading
-                                ? <p>Идет загрузка...</p>
-                                : <HistoryList />
-                            : isFilesLoading
-                                ? <p>Идет загрузка...</p>
-                                : <FilesList />
-                    }
+                    <MainView />
                 </div>
                 { previewFileSrc &&
                     <ImageModal imageSrc={previewFileSrc} onClose={() => setPreviewFileSrc('')} />

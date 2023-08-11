@@ -25,6 +25,7 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
     async function uploadFileToFirebaseStorage(
         file: File,
         recipientID: string,
+        senderID: string,
         senderName: string,
     ) {
         const storageRef = firebase.storage().ref();
@@ -54,7 +55,7 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
             },
             () => {
                 console.log('TEST File uploaded successfully!');
-                createFirestoreCloudDocument(filePath, recipientID, senderName);
+                createFirestoreCloudDocument(filePath, recipientID, senderID, senderName);
             },
         );
 
@@ -68,6 +69,7 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
     function createFirestoreCloudDocument(
         filePath: string,
         recipientID: string,
+        senderID: string,
         senderName: string,
     ) {
         const defaultFirestore = firebase.firestore();
@@ -77,10 +79,12 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
         const data = {
             filePath,
             recipientID,
+            senderID,
             senderName,
             createdAt,
             status: "Pending",
         };
+        console.log('🚀 - data:', data);
 
         defaultFirestore
             .collection('cloud')
@@ -98,14 +102,14 @@ const CloudShareModal: React.FC<Props> = ({ onClose }) => {
 
     const roomClickHandler = async (room: Room, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
-        const myProfile = await matrixClient.getProfileInfo(room.myUserId);
+        const senderID = room.myUserId;
+        const myProfile = await matrixClient.getProfileInfo(senderID);
         const senderName = myProfile.displayname;
         const roomMembers = room.currentState.members;
-        const membersList = Object.values(roomMembers);
-        console.log(senderName);
-        console.log(roomMembers);
+        const membersList = Object.values(roomMembers).filter((member) => member.userId !== senderID);
+
         membersList.forEach((member) => {
-            uploadFileToFirebaseStorage(selectedFile!, member.userId, senderName);
+            uploadFileToFirebaseStorage(selectedFile!, member.userId, senderID, senderName);
         });
     };
 
